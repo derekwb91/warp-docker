@@ -9,7 +9,8 @@ LABEL WARP_VERSION=${WARP_VERSION}
 LABEL GOST_VERSION=${GOST_VERSION}
 LABEL COMMIT_SHA=${COMMIT_SHA}
 COPY entrypoint.sh /entrypoint.sh
-COPY ./healthcheck /healthcheck
+# Only copy healthcheck if you still need the directory/scripts
+# COPY ./healthcheck /healthcheck
 # install dependencies
 RUN case ${TARGETPLATFORM} in \
       "linux/amd64")   export ARCH="amd64" ;; \
@@ -49,7 +50,6 @@ RUN case ${TARGETPLATFORM} in \
     fi && \
     chmod +x /usr/bin/gost && \
     chmod +x /entrypoint.sh && \
-    chmod +x /healthcheck/index.sh && \
     useradd -m -s /bin/bash warp && \
     echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp
 USER warp
